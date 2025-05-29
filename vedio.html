@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داگرتنی ڤیدیۆ | دیزاینی هاوچەرخ</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --error: #f72585;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn i {
+            font-size: 1.2rem;
+        }
+        
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: linear-gradient(to right, var(--success), #4cc9f0);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
+        }
+        
+        .error {
+            color: var(--error);
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .file-info {
+            margin-top: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .loader {
+            display: none;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>داگرتنی ڤیدیۆ</h1>
+            <p>لینکی ڕاستەوخۆی ڤیدیۆکە بنووسە بۆ داگرتن</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-group">
+                <label for="videoUrl">لینکی ڤیدیۆ</label>
+                <input type="text" id="videoUrl" placeholder="https://example.com/video.mp4">
+                <div id="error" class="error"></div>
+            </div>
+            
+            <button class="btn" onclick="checkVideo()">
+                <div class="loader" id="loader"></div>
+                <span id="btnText">پشکنین بکە</span>
+                <i class="fas fa-download"></i>
+            </button>
+            
+            <div class="result" id="result">
+                <div id="resultContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkVideo() {
+            const url = document.getElementById('videoUrl').value.trim();
+            const errorElement = document.getElementById('error');
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            const btnText = document.getElementById('btnText');
+            const loader = document.getElementById('loader');
+            
+            // پاککردنەوەی ئەنجامە پێشووەکان
+            errorElement.textContent = '';
+            resultDiv.style.display = 'none';
+            
+            // نمایشی loader
+            btnText.style.display = 'none';
+            loader.style.display = 'block';
+            
+            // دروستکردنی تایمەر بۆ نمایشی ئەنجامەکان
+            setTimeout(() => {
+                if (!url) {
+                    errorElement.textContent = 'تکایە لینکی ڤیدیۆکە بنووسە!';
+                    btnText.style.display = 'inline';
+                    loader.style.display = 'none';
+                    return;
+                }
+                
+                // پشکنینی لینکەکە
+                const videoExtensions = ['.mp4', '.webm', '.mov', '.avi', '.mkv'];
+                const isVideo = videoExtensions.some(ext => {
+                    const lowerUrl = url.toLowerCase();
+                    return lowerUrl.includes(ext) && 
+                          (lowerUrl.startsWith('http://') || lowerUrl.startsWith('https://'));
+                });
+                
+                if (isVideo) {
+                    const filename = getFilenameFromUrl(url);
+                    resultContent.innerHTML = `
+                        <p>لینکەکە گونجاوە! ئێستا دەتوانیت ڤیدیۆکە دابەزێنیت:</p>
+                        <div class="file-info">
+                            <p><strong>ناوی فایل:</strong> ${filename}</p>
+                            <p><strong>جۆری فایل:</strong> ${url.split('.').pop().toUpperCase()}</p>
+                        </div>
+                        <a href="${url}" download="${filename}" class="download-btn">
+                            <i class="fas fa-download"></i> داگرتنی ڤیدیۆ
+                        </a>
+                    `;
+                    resultDiv.style.display = 'block';
+                } else {
+                    errorElement.textContent = 'لینکەکە گونجاو نییە یان پشتگیری ناکرێت.';
+                }
+                
+                btnText.style.display = 'inline';
+                loader.style.display = 'none';
+            }, 800); // کاتەنگی کەم بۆ ئەوەی کاریگەری زیاتر بێت
+        }
+        
+        function getFilenameFromUrl(url) {
+            let filename = url.split('/').pop();
+            filename = filename.split('?')[0];
+            filename = filename || 'video_' + new Date().getTime();
+            return filename;
+        }
+    </script>
+</body>
+</html>
